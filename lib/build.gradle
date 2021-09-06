@@ -1,0 +1,24 @@
+plugins {
+    id 'java-library'
+}
+
+group 'io.tlf.netty.test.lib'
+version '0.0.0'
+
+repositories {
+    mavenCentral()
+}
+
+compileJava {
+    sourceCompatibility = '11'
+    targetCompatibility = '11'
+}
+
+dependencies {
+    // https://mvnrepository.com/artifact/io.netty/netty-all
+    implementation group: 'io.netty', name: 'netty-codec-http', version: '4.1.63.Final'
+}
+
+test {
+    useJUnitPlatform()
+}

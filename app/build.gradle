@@ -1,0 +1,55 @@
+plugins {
+    id 'java'
+}
+
+group 'io.tlf.netty.test.app'
+version '0.0.0'
+
+repositories {
+    mavenCentral()
+}
+
+compileJava {
+    sourceCompatibility = '11'
+    targetCompatibility = '11'
+}
+
+dependencies {
+    implementation project(":lib")
+
+    // https://mvnrepository.com/artifact/io.netty/netty-all
+    implementation group: 'io.netty', name: 'netty-all', version: '4.1.67.Final'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+task copyLib(type: Copy, dependsOn: assemble) {
+    from(configurations.runtimeClasspath.files)
+    into "$buildDir/dist/lib"
+}
+
+task copyJar(type: Copy, dependsOn: assemble) {
+    from jar.archiveFile
+    rename { String filename -> "Netty-Test.jar" }
+    into "$buildDir/dist"
+}
+
+task dist {
+    dependsOn copyLib
+    dependsOn copyJar
+}
+
+jar {
+    manifest {
+        attributes(
+                'Main-Class': 'io.tlf.netty.test.app.Main',
+                'Implementation-Title': project.name,
+                'Implementation-Version': project.version,
+                'Class-Path': configurations.runtimeClasspath.files.collect {
+                    'lib/' + it.getName()
+                }.join(' ')
+        )
+    }
+}

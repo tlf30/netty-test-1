@@ -1,0 +1,4 @@
+rootProject.name = 'netty-test-1'
+
+include 'lib'
+include 'app'
